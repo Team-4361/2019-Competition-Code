@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Talon;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,13 +24,16 @@ public class Robot extends IterativeRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private static Talon talon;
 
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
-  public void robotInit() {
+  public void robotInit() 
+  {
+    talon = new Talon(3);
     m_chooser.addDefault("Default Auto", kDefaultAuto);
     m_chooser.addObject("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -81,7 +85,7 @@ public class Robot extends IterativeRobot {
         break;
       case kDefaultAuto:
       default:
-        
+        // Put default auto code here
         break;
     }
   }
@@ -92,6 +96,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic()
   {
+    talon.set(0.5);
   }
 
   /**
