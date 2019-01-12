@@ -10,7 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Joystick;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +30,8 @@ public class Robot extends IterativeRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private static Talon talon;
+  private static WPI_TalonSRX talon;
+  private static Joystick stick;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -33,7 +40,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() 
   {
-    talon = new Talon(3);
+    talon = new WPI_TalonSRX(3);
+    stick = new Joystick(0);
     m_chooser.addDefault("Default Auto", kDefaultAuto);
     m_chooser.addObject("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -96,7 +104,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic()
   {
-    talon.set(0.5);
+    talon.set(stick.getX()); 
   }
 
   /**
