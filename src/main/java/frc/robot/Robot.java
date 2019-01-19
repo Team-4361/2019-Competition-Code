@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot
 
   public Joystick r_stick = new Joystick(1);
 
-  public Joystick xboxCont = new Joystick(2);
+  public XboxController xboxCont = new XboxController(2);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
