@@ -4,18 +4,23 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+package org.usfirst.frc.team4361.robot;
 
-package frc.robot;
-
+import edu.wpi.first.wiplibj;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 
 /**
@@ -25,13 +30,19 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot
+{
+  public Joystick l_stick = new Joystick(0);
+
+  public Joystick r_stick = new Joystick(1);
+
+  public Joystick xboxCont = new Joystick(2);
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private static WPI_TalonSRX talon;
-  private static Joystick stick;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -113,5 +124,27 @@ public class Robot extends IterativeRobot {
   @Override
   public void testPeriodic()
   {
+    
   }
+/*
+sansascii
+  █████████████▀▀▀▀▀▀▀▀▀▀▀▀▀███████████
+  ████████▀▀░░░░░░░░░░░░░░░░░░░▀▀██████
+  ██████▀░░░░░░░░░░░░░░░░░░░░░░░░░▀████
+  █████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███
+  ████░░░░░▄▄▄▄▄▄▄░░░░░░░░▄▄▄▄▄▄░░░░░██
+  ████░░▄██████████░░░░░░██▀░░░▀██▄░░██
+  ████░░███████████░░░░░░█▄░░▀░░▄██░░██
+  █████░░▀▀███████░░░██░░░██▄▄▄█▀▀░░███
+  ██████░░░░░░▄▄▀░░░████░░░▀▄▄░░░░░████
+  █████░░░░░█▄░░░░░░▀▀▀▀░░░░░░░█▄░░░███
+  █████░░░▀▀█░█▀▄▄▄▄▄▄▄▄▄▄▄▄▄▀██▀▀░░███
+  ██████░░░░░▀█▄░░█░░█░░░█░░█▄▀░░░░██▀▀
+  ▀░░░▀██▄░░░░░░▀▀█▄▄█▄▄▄█▄▀▀░░░░▄█▀░░░
+  ▄▄▄░░░▀▀██▄▄▄▄░░░░░░░░░░░░▄▄▄███░░░▄█
+  ██████▄▄░░▀█████▀█████▀██████▀▀░░▄███
+  ██████████▄░░▀▀█▄░░░░░▄██▀▀▀░▄▄▄███▀▄
+  ███████████░██░▄██▄▄▄▄█▄░▄░████████░█
+  ヨルダンは気力追跡をする
+  */
 }
