@@ -23,11 +23,11 @@ public class Intake
     private boolean isIntakeOpen;
     private WPI_TalonSRX leftArm;
     private WPI_TalonSRX rightArm;
-    private final int intakeMotor1 = 7;
-    private final int intakeMotor2 = 8;
+    private final int intakeMotor1 = 0;
+    private final int intakeMotor2 = 1;
     public Intake()
     {
-        this.sol = new DoubleSolenoid(Constant.intFSol, Constant.intRSol);
+        //this.sol = new DoubleSolenoid(Constant.intFSol, Constant.intRSol);
         this.leftArm = new WPI_TalonSRX(this.intakeMotor1);
         this.rightArm = new WPI_TalonSRX(this.intakeMotor2);
 
@@ -52,14 +52,14 @@ public class Intake
 
     public void openIntake()
 	{
-		this.sol.set(DoubleSolenoid.Value.kForward);
+		//this.sol.set(DoubleSolenoid.Value.kForward);
         SmartDashboard.putString("Intake Status", "Open");
 		this.isIntakeOpen = true;
 	}
 	
 	public void closeIntake()
 	{
-		this.sol.set(DoubleSolenoid.Value.kReverse);
+		//this.sol.set(DoubleSolenoid.Value.kReverse);
 		SmartDashboard.putString("Intake Status", "Close");
 		this.isIntakeOpen = false;
     }

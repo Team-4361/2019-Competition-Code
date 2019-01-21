@@ -3,8 +3,8 @@ package frc.robot;
 public class Constant {
 	
 	//Magic Numbers
-	public static final double IntakeSpeed = .2;
-	public static final double OuttakeSpeed = -.2;
+	public static final double IntakeSpeed = 0.4;
+	public static final double OuttakeSpeed = 0.4;
 
 	///Talons
 	public static final int CANLength=8;

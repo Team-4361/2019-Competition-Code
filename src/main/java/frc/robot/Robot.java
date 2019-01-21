@@ -26,10 +26,10 @@ public class Robot extends IterativeRobot {
   public Drive TankDrive;
   public Intake IntakeSystem;
 
-  public Joystick l_stick = new Joystick(0);
-  public Joystick r_stick = new Joystick(1);
+  public Joystick l_stick = new Joystick(1);
+  public Joystick r_stick = new Joystick(2);
 
-  public XboxController xboxCont = new XboxController(2);
+  public XboxController xboxCont = new XboxController(0);
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -126,11 +126,13 @@ public class Robot extends IterativeRobot {
     //Left trigger does suction
     if (xboxCont.getTriggerAxis(Hand.kLeft)>0.5)
     {
+      System.out.println("Suction on!");
       IntakeSystem.Suction();
     }
     //Right trigger shoots
     else if (xboxCont.getTriggerAxis(Hand.kRight)>0.5)
     {
+      System.out.println("Shooting!");
       IntakeSystem.Shoot();
     }
     //Stops intake motors
