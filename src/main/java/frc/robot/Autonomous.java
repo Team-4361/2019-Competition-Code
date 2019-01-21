@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4361.robot;
+package frc.robot;
 
 //import of libraries 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -15,8 +15,3 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
-private void visionTracking()
-{
-    done;
-}

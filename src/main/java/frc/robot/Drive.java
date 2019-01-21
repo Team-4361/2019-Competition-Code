@@ -1,36 +1,47 @@
-public class Drive
+package frc.robot;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+public abstract class Drive
 {
-    private final int l_motor1 = 1;
-    private final int l_motor2 = 2;
-    private final int l_motor3 = 3;
-    private final int r_motor1 = 4;
-    private final int r_motor2 = 5;
-    private final int r_motor3 = 6;
+    protected final int l_motor1 = 1;
+    protected final int l_motor2 = 2;
+    protected final int l_motor3 = 3;
+    protected final int r_motor1 = 4;
+    protected final int r_motor2 = 5;
+    protected final int r_motor3 = 6;
 
-    private WPI_TalonSRX frontLeft;
-    private WPI_TalonSRX middleLeft;
-    private WPI_TalonSRX backLeft;
-    private SpeedControllerGroup left;
+    protected WPI_TalonSRX frontLeft;
+    protected WPI_TalonSRX middleLeft;
+    protected WPI_TalonSRX backLeft;
+    protected SpeedControllerGroup left;
 
-    private WPI_TalonSRX frontRight;
-    private WPI_TalonSRX middleRight;
-    private WPI_TalonSRX backRight;
-    private SpeedControllerGroup right;
+    protected WPI_TalonSRX frontRight;
+    protected WPI_TalonSRX middleRight;
+    protected WPI_TalonSRX backRight;
+    protected SpeedControllerGroup right;
 
-    private DifferentialDrive drive;
+    protected DifferentialDrive drive;
 
     public Drive()
     {
         frontLeft = new WPI_TalonSRX(l_motor1);
         middleLeft = new WPI_TalonSRX(l_motor2);
         backLeft = new WPI_TalonSRX(l_motor3);
-        left = new SpeedControllerGroup(frontLeft, middleLeft, rearLeft);
+        left = new SpeedControllerGroup(frontLeft, middleLeft, backLeft);
 
         frontRight = new WPI_TalonSRX(r_motor1);
         middleRight = new WPI_TalonSRX(r_motor2);
         backRight = new WPI_TalonSRX(r_motor3);
-        right = new SpeedControllerGroup(frontRight, middleRight, rearRight);
+        right = new SpeedControllerGroup(frontRight, middleRight, backLeft);
 
         drive = new DifferentialDrive(left, right);
     }
+    
+    public abstract void handleInputs();
+
+    public abstract void setup();
 }

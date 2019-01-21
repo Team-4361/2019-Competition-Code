@@ -1,20 +1,6 @@
-package org.usfirst.frc.team4361.robot;
+package frc.robot;
 
-//import of libraries 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 
 
@@ -28,99 +14,71 @@ Each enumeration constant is public, static and final by default.
 
 public class DriveJoystick extends Drive
 {
-    private XboxController xboxCont;
     private Joystick l_stick;
     private Joystick r_stick;
-
-    public Drive(Joystick l, Joystick r)
-    {
-        this.l_stick = l;
-        this.r_stick = r;
-        super();
-
-    }
-    //variables for talons
-
-    frontLeft.setInverted(true);
-    middleLeft.setInverted(true);
-    rearLeft.setInverted(true);
-
-    private SpeedControllerGroup left = new SpeedControllerGroup(frontLeft, middleLeft, rearLeft);
-    left.set(l_stick);
-
-
-    frontRight.setInverted(true);
-    middleRight.setInverted(true);
-    rearRight.setInverted(true);  
-
-    private SpeedControllerGroup right = new SpeedControllerGroup(frontRight, middleRight, rearRight);
-    right.set(r_stick);
-
-    public DifferentialDrive drive = new DifferentialDrive(left, right);
-
-    //used to determine the deadzone of the joystick.
+    private double yWithDeadzone;
     private double deadZonePositive = 0.2;
     private double deadZoneNegative = -0.2;
 
-
-    //declaration of variables for deadzones
-    private double xWithDeadzone;
-    private double yWithDeadzone;
-
-
-    //X Deadzone
-    if(l_stick.getX()<=deadZonePositive && l_stick.getX()>=deadZoneNegative)
+    public DriveJoystick(Joystick l, Joystick r)
     {
-        xWithDeadzone = 0.0;
+        super();
+        this.l_stick = l;
+        this.r_stick = r;
+
     }
-    else if(l_stick.getX()>deadZonePositive)
+    @Override
+    public void setup()
     {
-        xWithDeadzone = l_stick.getX()-deadZonePositive;
-    }
-    else if(l_stick.getX()<deadZoneNegative)
-    {
-        xWithDeadzone = l_stick.getX()-deadZoneNegative;
+        left.setInverted(true);
+        right.setInverted(false);
+
     }
 
-    if(r_stick.getX()<=deadZonePositive && r_stick.getX()>=deadZoneNegative)
-    {
-        xWithDeadzone = 0.0;
-    }
-    else if(r_stick.getX()>deadZonePositive)
-    {
-        xWithDeadzone = r_stick.getX()-deadZonePositive;
-    }
-    else if(r_stick.getX()<deadZoneNegative)
-    {
-        xWithDeadzone = r_stick.getX()-deadZoneNegative;
-    }
+    @Override
+    public void handleInputs()
+    {		
+        drive.tankDrive(this.l_stick.getY() * 0.9, this.r_stick.getY() * 0.9);
 
-    //Y Deadzones    
-    if(l_stick.getY()<=deadZonePositive && l_stick.getY()>=deadZoneNegative)
-    {
-        yWithDeadzone = 0.0;
+        //valueL *= (double)Gear/4.0;
+	    //valueR *= (double)Gear/4.0;
+		
+		//chassis.drive(valueL, valueR);
     }
-    else if(l_stick.getY()>deadZonePositive)
-    {
-        yWithDeadzone = l_stick.getY()-deadZonePositive;
-    }
-    else if(l_stick.getY()<deadZoneNegative)
-    {
-        yWithDeadzone = l_stick.getY()-deadZoneNegative;
-    }
+   
 
-    if(r_stick.getY()<=deadZonePositive && r_stick.getY()>=deadZoneNegative)
+    //Y deadzone
+    public double getYDeadzone()
     {
-        yWithDeadzone = 0.0;
-    }
-    else if(r_stick.getY()>deadZonePositive)
-    {
+        if(l_stick.getY()<=deadZonePositive && l_stick.getY()>=deadZoneNegative)
+        {
+            yWithDeadzone = 0.0;
+        }
+        else if(l_stick.getY()>deadZonePositive)
+        {
+            yWithDeadzone = l_stick.getY()-deadZonePositive;
+        }
+        else if(l_stick.getY()<deadZoneNegative)
+        {
+            yWithDeadzone = l_stick.getY()-deadZoneNegative;
+        }
+
+        if(r_stick.getY()<=deadZonePositive && r_stick.getY()>=deadZoneNegative)
+        {
+            yWithDeadzone = 0.0;
+        }
+        else if(r_stick.getY()>deadZonePositive)
+        {
         yWithDeadzone = r_stick.getX()-deadZonePositive;
+        }
+        else if(r_stick.getY()<deadZoneNegative)
+        {
+            yWithDeadzone = r_stick.getY()-deadZoneNegative;
+        }
+        return yWithDeadzone;
     }
-    else if(r_stick.getY()<deadZoneNegative)
-    {
-        yWithDeadzone = r_stick.getY()-deadZoneNegative;
-    }
+}
+    
     /*
     acaiiDogeiy
     ░▄▀▄▀▀▀▀▄▀▄░░░░░░░░░
@@ -134,4 +92,3 @@ public class DriveJoystick extends Drive
     ░█░▄▀█░▄▀░░█░▄▀█░▄▀░
     ░░▀░░░▀░░░░░▀░░░▀░░░
 */
-}   

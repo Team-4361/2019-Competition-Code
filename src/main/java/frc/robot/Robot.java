@@ -4,23 +4,15 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-package org.usfirst.frc.team4361.robot;
+package frc.robot;
 
-import edu.wpi.first.wiplibj;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.TalonSRX;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 
 
 /**
@@ -30,10 +22,11 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends IterativeRobot
-{
-  public Joystick l_stick = new Joystick(0);
+public class Robot extends IterativeRobot {
+  public Drive TankDrive;
+  public Intake IntakeSystem;
 
+  public Joystick l_stick = new Joystick(0);
   public Joystick r_stick = new Joystick(1);
 
   public XboxController xboxCont = new XboxController(2);
@@ -42,7 +35,8 @@ public class Robot extends IterativeRobot
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private static WPI_TalonSRX talon;
+
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -51,11 +45,13 @@ public class Robot extends IterativeRobot
   @Override
   public void robotInit() 
   {
-    talon = new WPI_TalonSRX(3);
-    stick = new Joystick(0);
     m_chooser.addDefault("Default Auto", kDefaultAuto);
     m_chooser.addObject("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    this.TankDrive = new DriveJoystick(l_stick, r_stick);
+    this.TankDrive.setup();
+    this.IntakeSystem = new Intake();
+    this.IntakeSystem.Setup();
   }
 
   /**
@@ -115,16 +111,38 @@ public class Robot extends IterativeRobot
   @Override
   public void teleopPeriodic()
   {
-    talon.set(stick.getX()); 
-  }
+    TankDrive.handleInputs();
+    //A button opens intake
+    if (xboxCont.getRawButton(Constant.AButton)==true)
+    {
+      IntakeSystem.openIntake();
+    }
+    //B button closes intake
+    else if (xboxCont.getRawButton(Constant.BButton)==true)
+    {
+      IntakeSystem.closeIntake();
+    }
 
+    //Left trigger does suction
+    if (xboxCont.getTriggerAxis(Hand.kLeft)>0.5)
+    {
+      IntakeSystem.Suction();
+    }
+    //Right trigger shoots
+    else if (xboxCont.getTriggerAxis(Hand.kRight)>0.5)
+    {
+      IntakeSystem.Shoot();
+    }
+    //Stops intake motors
+    else 
+      IntakeSystem.Stop();
+  }
   /**
    * This function is called periodically during test mode.
    */
   @Override
   public void testPeriodic()
   {
-    
   }
 /*
 sansascii
