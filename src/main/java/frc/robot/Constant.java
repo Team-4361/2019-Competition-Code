@@ -70,8 +70,6 @@ public class Constant {
 	public static final double outtakeSpeed=.55;
 	public static final double fastOuttakeSpeed=.7;
 	public static final double stopIntakeSpeed=.05;
-	public static final double elevatorSpeed=-.85;
-	public static final double elevatorDownSpeed=-.7;
 	public static final double climbSpeed=-.4;
 
 	///Distance
@@ -90,6 +88,13 @@ public class Constant {
 	public static final double PortalDepth = 30.0;
 	public static final double CubeZoneWidth = 42.0;
 	public static final double ScalePlate = 48.0;
-	public static final double RobotWidth =  39.5;
-	public static final double RobotDepth = 35.0;
+
+	//2019 Constants
+	public static final double RobotWidth =  28.0;
+	public static final double RobotLength = 32.0;
+	public static final double lv1HabPlatformNORAMP = 35.78;
+	public static final double lv1HabPlatformWITHRAMP = 48.28;
+	public static final double elevatorSpeed=.5;
+	public static final double elevatorDownSpeed=.4;
+	
 }

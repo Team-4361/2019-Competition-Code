@@ -8,8 +8,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
   public Drive TankDrive;
   public Intake IntakeSystem;
+  public Elevator ElevatorSystem;
 
   public Joystick l_stick = new Joystick(1);
   public Joystick r_stick = new Joystick(2);
@@ -36,7 +39,9 @@ public class Robot extends IterativeRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-
+  // Debug code
+  private Timer timer = new Timer();
+  private double lastTime;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -52,6 +57,10 @@ public class Robot extends IterativeRobot {
     this.TankDrive.setup();
     this.IntakeSystem = new Intake();
     this.IntakeSystem.Setup();
+    this.ElevatorSystem = new Elevator(xboxCont);
+    this.ElevatorSystem.Setup();
+
+    timer.start();
   }
 
   /**
@@ -111,14 +120,18 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic()
   {
+    System.out.println(timer.get());
+
+
     TankDrive.handleInputs();
+    ElevatorSystem.handleInputs();
     //A button opens intake
-    if (xboxCont.getRawButton(Constant.AButton)==true)
+    if (xboxCont.getRawButton(Constant.BButton)==true)
     {
       IntakeSystem.openIntake();
     }
-    //B button closes intake
-    else if (xboxCont.getRawButton(Constant.BButton)==true)
+    //X button closes intake
+    else if (xboxCont.getRawButton(Constant.XButton)==true)
     {
       IntakeSystem.closeIntake();
     }

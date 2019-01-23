@@ -23,8 +23,8 @@ public class Intake
     private boolean isIntakeOpen;
     private WPI_TalonSRX leftArm;
     private WPI_TalonSRX rightArm;
-    private final int intakeMotor1 = 0;
-    private final int intakeMotor2 = 1;
+    private final int intakeMotor1 = 7;
+    private final int intakeMotor2 = 8;
     public Intake()
     {
         //this.sol = new DoubleSolenoid(Constant.intFSol, Constant.intRSol);
