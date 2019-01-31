@@ -6,6 +6,9 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -14,6 +17,9 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.internal.HardwareTimer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.Library.Chassis.TankDrive;
+import frc.Library.Controls.JoystickTank;
+import frc.Library.Controllers.*;
 
 
 
@@ -25,23 +31,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
-  public Drive TankDrive;
+  public WPI_TalonSRX[] talons;
+
+
+  public TankDrive TankDrive;
   public Intake IntakeSystem;
   public Elevator ElevatorSystem;
+  public Climber Climber;
 
-  public Joystick l_stick = new Joystick(1);
-  public Joystick r_stick = new Joystick(2);
+  public JoystickTank sticks = new JoystickTank(1, 2);
 
   public XboxController xboxCont = new XboxController(0);
 
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
+
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  public PneumaticsControl pneum;
+  public DoubleSolenoid intake1;
+  public DoubleSolenoid intake2;
+  public DoubleSolenoid climber1;
+  public DoubleSolenoid climber2;
+  public DoubleSolenoid driveTrain1;
+  public DoubleSolenoid driveTrain2;
+  
 
   // Debug code
   private Timer timer = new Timer();
   private double lastTime;
+
+  
 
   /**
    * This function is run when the robot is first started up and should be
@@ -50,15 +69,26 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() 
   {
-    m_chooser.addDefault("Default Auto", kDefaultAuto);
-    m_chooser.addObject("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    this.TankDrive = new DriveJoystick(l_stick, r_stick);
-    this.TankDrive.setup();
+
+    pneum = new PneumaticsControl(Constant.PneumaticCompressor, Constant.PressureSensor, Constant.PneumaticOffset);
+
+    this.talons = new WPI_TalonSRX[Constant.CANLength];
+    for(int i = 0; i < talons.length; i++)
+    {
+      this.talons[i] = new WPI_TalonSRX(i);
+    }
+    Drive.SetFullCAN(talons);
+    int[] lDriveMotors = {Constant.Left0, Constant.Left1, Constant.Left2};
+    Drive lDrive = new Drive(lDriveMotors);
+    int[] rDriveMotors = {Constant.Right0, Constant.Right1, Constant.Right2};
+    Drive rDrive = new Drive(rDriveMotors);
+
+    this.TankDrive = new TankDrive(lDrive, rDrive);
     this.IntakeSystem = new Intake();
     this.IntakeSystem.Setup();
-    this.ElevatorSystem = new Elevator(xboxCont);
-    this.ElevatorSystem.Setup();
+    //this.ElevatorSystem = new Elevator(xboxCont);
+    //this.ElevatorSystem.Setup();
 
     timer.start();
   }
@@ -74,7 +104,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotPeriodic()
   {
-
+    pneum.DisplayPSI();
   }
 
   /**
@@ -104,13 +134,6 @@ public class Robot extends IterativeRobot {
   public void autonomousPeriodic()
   {
     switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
     }
   }
 
@@ -123,8 +146,8 @@ public class Robot extends IterativeRobot {
     System.out.println(timer.get());
 
 
-    TankDrive.handleInputs();
-    ElevatorSystem.handleInputs();
+    TankDrive.drive(sticks.GetDrive());
+    //ElevatorSystem.handleInputs();
     //A button opens intake
     if (xboxCont.getRawButton(Constant.BButton)==true)
     {
@@ -149,16 +172,48 @@ public class Robot extends IterativeRobot {
       IntakeSystem.Shoot();
     }
     //Stops intake motors
-    else 
+    else
+    {
       IntakeSystem.Stop();
+    } 
+ 
+    //CLIMBER
+    if(sticks.left.getRawButton(2))
+    {
+      Climber.goUpFront();
+    }
+    else if(sticks.left.getRawButton(3))
+    {
+      Climber.goDownFront();
+    }
+
+    if(sticks.right.getRawButton(2))
+    {
+      Climber.goUpBack();
+    }
+    else if(sticks.right.getRawButton(3))
+    {
+      Climber.goDownBack();
+    }
+
+    if(sticks.right.getPOV()<90 || sticks.right.getPOV()>270)
+    {
+      Climber.rollerForward();
+    }
+    else if(sticks.right.getPOV()>90 || sticks.right.getPOV()<270)
+    {
+      Climber.rollerBackward();
+    }
   }
   /**
    * This function is called periodically during test mode.
    */
+
   @Override
   public void testPeriodic()
   {
   }
+
 /*
 sansascii
   █████████████▀▀▀▀▀▀▀▀▀▀▀▀▀███████████

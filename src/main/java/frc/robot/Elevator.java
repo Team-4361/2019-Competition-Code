@@ -25,11 +25,21 @@ public class Elevator
     private boolean isButtonPressed = false;
     private DigitalInput[] sensors;
     private final int SENSOR_COUNT = 7;
+    private Encoder elevatorEnc;
+    private double desiredHeight = 0.0;
+
 
     public enum Position
 	{
 		Minimum, RocketLowBall, RocketMediumHatch, RocketMediumBall, RocketHighHatch, RocketHighBall, Maximum
-	}
+    }
+    int[] levels = {Constant.Minimum, 
+                    Constant.RocketLowBall, 
+                    Constant.RocketMediumHatch, 
+                    Constant.RocketMediumBall, 
+                    Constant.RocketHighHatch, 
+                    Constant.RocketHighBall, 
+                    Constant.Maximum};
 
     public Elevator(XboxController xbox)
     {
@@ -44,16 +54,19 @@ public class Elevator
         {
             sensors[i] = new DigitalInput(i);
         }
-                    
+        elevatorEnc = new Encoder(Constant.encChannelA, Constant.encChannelB);
+        double elevatorDrum = Math.PI*Constant.spoolDiameter;
+        elevatorEnc.setDistancePerPulse(elevatorDrum/Constant.encTicksPerRev);                    
     }
     public void handleInputs()
     {
         //Going Up a level.
-        if (controller.getRawButton(Constant.AButton) && !isButtonPressed)
+        if (controller.getRawButton(Constant.AButton) && !isButtonPressed && desiredLevel != 6)
         {
             desiredLevel++;
             isButtonPressed = true;
             SmartDashboard.putString("Current Level", Position.values()[desiredLevel].toString());
+            desiredHeight = levels[desiredLevel];
         }
         
         else if(!controller.getRawButton(Constant.AButton))
@@ -62,26 +75,35 @@ public class Elevator
         }
 
         //Going Down a level.
-        if (controller.getRawButton(Constant.YButton) && !isButtonPressed)
+        if (controller.getRawButton(Constant.YButton) && !isButtonPressed && desiredLevel != 0)
         {
             desiredLevel--;
             isButtonPressed=true;
             SmartDashboard.putString("Current Level", Position.values()[desiredLevel].toString());
+            desiredHeight = levels[desiredLevel];
         }
         else if (!controller.getRawButton(Constant.YButton))
         {
             isButtonPressed=false;
         }
+        runElevator();
+    }
+    public void setLevel(int level)
+    {
+        desiredLevel = level;
+    }
+    public void runElevator()
+    {
         checkLevel();
-        if(canMove() < 0)
+        if(getDesiredHeight() < getActualHeight())
         {
             goDown();
         }
-        else if (canMove() > 0)
+        else if (getDesiredHeight() > getActualHeight())
         {
             goUp();
         }
-        else if(canMove() == 0)
+        else if(getDesiredHeight() == getActualHeight())
         {
             stop();
         }
@@ -97,9 +119,9 @@ public class Elevator
             desiredLevel = 0;
         }                        
     }
-    public int canMove()
+    public double canMove()
     {
-        int err = desiredLevel-actualLevel;
+        double err = getDesiredHeight()-getActualHeight();
         return err;
     }
     public void goUp()
@@ -116,11 +138,12 @@ public class Elevator
     {
         elevator.stopMotor();
     }
-    public void checkSensors()
+    public double getActualHeight()
     {
-        for(int i = 0; i <=SENSOR_COUNT; i++)
-        {
-                                                
-        }
+        return Math.abs(elevatorEnc.getDistance());
+    }
+    public double getDesiredHeight()
+    {
+        return desiredHeight;
     }
 }

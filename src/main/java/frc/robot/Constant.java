@@ -2,19 +2,6 @@ package frc.robot;
 
 public class Constant {
 	
-	//Magic Numbers
-	public static final double IntakeSpeed = 0.4;
-	public static final double OuttakeSpeed = 0.4;
-
-	///Talons
-	public static final int CANLength=8;
-	public static final int Left0 = 1;
-	public static final int Left1 = 0;
-	public static final int Right0 = 2;
-	public static final int Right1 = 3;
-	public static final int Elevator = 5;
-	public static final int lInt = 7;
-	public static final int rInt = 6;
 
 	///Xbox Controller
 	public static final int LStickX=0;
@@ -45,7 +32,6 @@ public class Constant {
 
 	///Sensors
 	///Analog
-	public static final int PressureSensor = 0;
 
 	///Digital
 	public static final int lEnc1 = 8;
@@ -72,7 +58,7 @@ public class Constant {
 	public static final double stopIntakeSpeed=.05;
 	public static final double climbSpeed=-.4;
 
-	///Distance
+	///2017 Distances
 	public static final double StationWidth = 72.0;
 	public static final double ExchangerWidth = 36.0;
 	public static final double ExchangerDepth = 48.0;
@@ -89,12 +75,46 @@ public class Constant {
 	public static final double CubeZoneWidth = 42.0;
 	public static final double ScalePlate = 48.0;
 
-	//2019 Constants
+	///2019 Base Constants
 	public static final double RobotWidth =  28.0;
 	public static final double RobotLength = 32.0;
 	public static final double lv1HabPlatformNORAMP = 35.78;
 	public static final double lv1HabPlatformWITHRAMP = 48.28;
 	public static final double elevatorSpeed=.5;
 	public static final double elevatorDownSpeed=.4;
-	
+	public static final double spoolDiameter = 0.0;
+	public static final int encTicksPerRev = 1024;
+	public static final int encChannelA = 0;
+	public static final int encChannelB = 1;
+
+	///Heights of Holes for Elevator
+	public static final int Minimum = 0; 
+	public static final int RocketLowBall = 10;
+	public static final int RocketMediumHatch = 20;
+	public static final int RocketMediumBall = 30;
+	public static final int RocketHighHatch = 40;
+	public static final int RocketHighBall = 50;
+	public static final int Maximum = 60;
+
+	//Magic Numbers
+	public static final double IntakeSpeed = 0.4;
+	public static final double OuttakeSpeed = 0.4;
+
+	///Talons
+	public static final int CANLength=12;
+	public static final int Left0 = 1;
+	public static final int Left1 = 2;
+	public static final int Left2 = 3;
+	public static final int Right0 = 4;
+	public static final int Right1 = 5;
+	public static final int Right2 = 6;
+	public static final int intakeMotor1 = 7;
+	public static final int intakeMotor2 = 8;
+	public static final int elevatorMotor = 9;
+	public static final int frontLiftMotor = 10;
+	public static final int backLiftMotor = 11;
+	public static final int backRollerMotor = 12;
+	public static final double PneumaticOffset = 4.547368;
+	public static final int PressureSensor = 0;
+	public static final int PneumaticCompressor = 0;
 }
